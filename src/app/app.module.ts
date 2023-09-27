@@ -10,12 +10,12 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
 import { LabelModule } from '@progress/kendo-angular-label';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 
-
 import { AppComponent } from './app.component';
 import { ProductsService } from './products.service';
+import { CustomModalComponent } from './custom-modal/custom-modal.component';
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [AppComponent, CustomModalComponent],
     imports: [
         BrowserModule, 
         BrowserAnimationsModule, 
