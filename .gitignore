@@ -1,0 +1,52 @@
+# Ignore Node.js related files and directories
+node_modules/
+npm-debug.log
+yarn-error.log
+
+.angular
+.angular/
+
+# Ignore build output
+/dist/
+/tmp/
+/out-tsc/
+
+# Ignore IDE and editor specific files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Ignore log files
+*.log
+
+# Ignore environment files
+.env
+
+# Ignore dependencies and build artifacts
+package-lock.json
+yarn.lock
+
+# Ignore system and hidden files
+.DS_Store
+Thumbs.db
+
+# Ignore Angular CLI configuration files
+angular.json
+nx.json
+
+# Ignore test files and directories
+/e2e/
+*.spec.ts
+
+# Ignore local development files
+/src/environments/environment.ts
+
+# Ignore temporary files
+*.swp
+
+# Ignore local configuration
+/src/environments/environment.local.ts

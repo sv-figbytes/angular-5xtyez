@@ -1,0 +1,10 @@
+<div class="custom-modal" style="border: 1px solid red; position: absolute; top: 100px; left: 100px;">
+    <div class="modal-content">
+      <h2>Edit Option</h2>
+      <input type="text" [(ngModel)]="editedOption" placeholder="Edit Option">
+      <div class="modal-buttons">
+        <button (click)="onSaveClick()">Save</button>
+        <button (click)="onCancelClick()">Cancel</button>
+      </div>
+    </div>
+  </div>
