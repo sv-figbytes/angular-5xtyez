@@ -12,12 +12,15 @@ import {
   SaveEvent,
   GridComponent,
 } from '@progress/kendo-angular-grid';
+import { Observable, of, tap } from 'rxjs';
+import { log } from 'console';
+import { threadId } from 'worker_threads';
 
 @Component({
   selector: 'my-app',
   template: `
         <kendo-grid
-            [data]="gridData"
+            [kendoGridBinding]="(gridData | async)!"
             (edit)="editHandler($event)"
             (cancel)="cancelHandler($event)"
             (save)="saveHandler($event)"
@@ -29,6 +32,18 @@ import {
                 <button kendoGridAddCommand>Add new</button>
             </ng-template>
             <kendo-grid-column field="ProductName" title="Name" [width]="150"> </kendo-grid-column>
+
+            <kendo-grid-column field="item.option" title="Temp" [width]="150">
+              <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                <input type="text" [(ngModel)]="dataItem.item.option" placeholder="Enter something..." />
+              </ng-template>
+
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <button (click)="openModal($event)">modal</button> {{dataItem.item.option}}
+              </ng-template>
+              
+            </kendo-grid-column>
+
             <kendo-grid-column field="CategoryID" title="Category" [width]="150">
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-dropdownlist
@@ -50,7 +65,10 @@ import {
             </kendo-grid-column>
             <kendo-grid-column field="UnitPrice" title="Price" format="c" [width]="120" editor="numeric"> </kendo-grid-column>
             <kendo-grid-column field="UnitsInStock" title="In stock" [width]="120" editor="numeric"> </kendo-grid-column>
-            <kendo-grid-command-column title="command" [width]="220">
+
+            
+
+            <kendo-grid-command-column title="command" [width]="150">
                 <ng-template kendoGridCellTemplate let-isNew="isNew">
                     <button kendoGridEditCommand [primary]="true">Edit</button>
                     <button kendoGridRemoveCommand>Remove</button>
@@ -63,19 +81,32 @@ import {
                 </ng-template>
             </kendo-grid-command-column>
         </kendo-grid>
+        <button (click)="logGridData()">Log Grid Data</button>
+
     `,
 })
 export class AppComponent implements OnInit {
-  public gridData: Product[];
+  public gridData: Observable<Product[]> = of(this.service.products())
+                                            .pipe(tap(i => console.log('tap', i)));
   public categories: Category[] = categories;
   public formGroup: FormGroup;
   private editedRowIndex: number;
 
   constructor(private service: ProductsService) {}
 
-  public ngOnInit(): void {
-    this.gridData = this.service.products();
+  public openModal(a: any): void {
+    console.log('call modal open', a)
   }
+
+  public ngOnInit(): void {
+    this.gridData.subscribe(x => console.log('subscribe', x))
+  }
+
+  public logGridData(): void {
+    this.gridData.subscribe((data) => {
+        console.log('Current Grid Data:', data);
+    });
+}
 
   public category(id: number): Category {
     return this.categories.find((x) => x.CategoryID === id);
@@ -114,8 +145,6 @@ export class AppComponent implements OnInit {
     this.service.save(product, isNew);
 
     sender.closeRow(rowIndex);
-
-    console.log(999, this.gridData);
   }
 
   public removeHandler({ dataItem }: RemoveEvent): void {

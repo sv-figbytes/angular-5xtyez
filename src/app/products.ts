@@ -15,7 +15,7 @@ export interface Product {
   };
 }
 
-export const products = [
+export const products: Product[] = [
   {
     ProductID: 1,
     ProductName: 'Chai',
@@ -75,6 +75,10 @@ export const products = [
     UnitsOnOrder: 0,
     ReorderLevel: 0,
     Discontinued: false,
+    item: {
+      quantity: 15,
+      option: 'two',
+    },
   },
   {
     ProductID: 5,
